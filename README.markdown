@@ -82,4 +82,5 @@ Authors
 -------
 
 Scott Graham (@h4kr, http://h4ck3r.net/)
+
 Xbox 360 Icon Pack by Jeff Jenkins (@sinnix, http://sinnix.net/downloads/?did=1)
