@@ -69,13 +69,14 @@ recommended tolerances.
 Button images
 -------------
 
-.image[button_name] is the URL of an image that can be used to communicate with
-the user. For example .image['faceButton0'] will be a picture of a green "A"
-button if the connected device is an Xbox 360 controller.
+`.image[button_name]` is the URL of an image that can be used to
+communicate with the user. For example `.image['faceButton0']` will be a
+picture of a green "A" button if the connected device is an Xbox 360
+controller.
 
-For the axes, the names are 'leftStick', and 'rightStick', rather than separate
-items for X/Y. There is also a generic 'dpad' image (with no direction
-specified).
+For the axes, the names are `leftStick`, and `rightStick`, rather than
+separate items for X/Y. There is also a generic `dpad` image (with no
+direction specified).
 
 
 Authors
