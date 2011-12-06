@@ -1,9 +1,20 @@
 /** @license gamepad.js, See README for copyright and usage instructions.
 */
 (function() {
+    // todo; current moz nightly does not define this
+    navigator.mozGamepads = [];
     var getField = function() {
         return navigator.webkitGamepads || navigator.mozGamepads || navigator.gamepads;
     };
+
+    var mozConnectHandler = function(e) {
+        navigator.mozGamepads[e.gamepad.index] = e.gamepad;
+    }
+    var mozDisconnectHandler = function(e) {
+        navigator.mozGamepads[e.gamepad.index] = undefined;
+    }
+    window.addEventListener("MozGamepadConnected", mozConnectHandler);
+    window.addEventListener("MozGamepadDisconnected", mozDisconnectHandler);
 
     function Item() {
         this['leftStickX'] = 0.0;
@@ -40,6 +51,9 @@
     var isMac = contains(userAgent, 'Macintosh');
     var isChrome = contains(userAgent, 'Chrome/');
     var isFirefox = contains(userAgent, 'Firefox/');
+    var axisToButton = function(value) {
+        return (value + 1.0) / 2.0;
+    };
 
     var ChromeWindowsXinputGamepad = function(raw, into, index) {
         into['leftStickX'] = raw.axes[0];
@@ -71,7 +85,36 @@
         into['name'] = "Xbox 360 Player " + (index + 1);
     };
 
-    var FirefoxWindowsXbox360Controller = [];
+    var FirefoxWindowsXbox360Controller = function(raw, into, index) {
+        // Wow, dinput is a disaster.
+        into['leftStickX'] = raw.axes[0];
+        into['leftStickY'] = raw.axes[1];
+        into['rightStickX'] = raw.axes[3];
+        into['rightStickY'] = raw.axes[4];
+        into['faceButton0'] = raw.buttons[0];
+        into['faceButton1'] = raw.buttons[1];
+        into['faceButton2'] = raw.buttons[2];
+        into['faceButton3'] = raw.buttons[3];
+        into['leftShoulder0'] = raw.buttons[4];
+        into['rightShoulder0'] = raw.buttons[5];
+        into['leftShoulder1'] = raw.axes[2] > 0 ? raw.axes[2] : 0;
+        into['rightShoulder1'] = raw.axes[2] < 0 ? -raw.axes[2] : 0;
+        into['select'] = raw.buttons[6];
+        into['start'] = raw.buttons[7];
+        into['leftStickButton'] = raw.buttons[8];
+        into['rightStickButton'] = raw.buttons[9];
+        into['dpadUp'] = raw.axes[6] < -0.5 ? 1 : 0;
+        into['dpadDown'] = raw.axes[6] > 0.5 ? 1 : 0;
+        into['dpadLeft'] = raw.axes[5] < -0.5 ? 1 : 0;
+        into['dpadRight'] = raw.axes[5] > 0.5 ? 1 : 0;
+        // From http://msdn.microsoft.com/en-us/library/windows/desktop/ee417001(v=vs.85).aspx
+        into.deadZoneLeftStick = 7849.0/32767.0;
+        into.deadZoneRightStick = 8689/32767.0;
+        into.deadZoneShoulder0 = 0.5;
+        into.deadZoneShoulder1 = 30.0/255.0;
+        into['images'] = Gamepad.ImageDataUrls_Xbox360;
+        into['name'] = "Xbox 360 Player " + (index + 1);
+    }
 
     var mapPad = function(raw, mapped) {
         if (isChrome && isWindows && contains(raw.id, 'XInput ') && contains(raw.id, 'GAMEPAD')) {
