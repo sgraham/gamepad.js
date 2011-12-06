@@ -20,18 +20,14 @@ Add
 
 to your html.
 
-Check if the browser supports gamepads with
-
-    Gamepad.supported
-    
-and if that's true, get gamepads each `window.requestAnimationFrame` via
-`Gamepad.getPads()`. That returns an array of gamepads that the user has
-interacted with (pressed a button at least once). Data available on each
-item below.
+Check if the browser supports gamepads via `Gamepad.supported`. If that's true,
+get gamepad data each `window.requestAnimationFrame` via `Gamepad.getPads()`.
+`getPads` returns an array of gamepads that the user has interacted with
+(pressed a button at least once). Data available on each gamepad detailed below.
 
 
-Raw data returned
------------------
+Per-gamepad data
+----------------
 
 Each item in the array contains:
 
@@ -43,6 +39,7 @@ Axes, in the range [-1..1]:
     .rightStickY
 
 Buttons, in the range [0..1]:
+
     .faceButton0
     .faceButton1
     .faceButton2
