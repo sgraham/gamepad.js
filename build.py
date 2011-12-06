@@ -5,6 +5,7 @@
 import base64
 import platform
 import os
+import shutil
 import sys
 
 def main():
@@ -27,6 +28,7 @@ def main():
     ret = os.system(javaPath + " -jar closure\\compiler.jar --js gamepad_uncompressed.js --js_output_file gamepad.js --compilation_level ADVANCED_OPTIMIZATIONS")
     if ret != 0:
         return ret
+    shutil.copyfile('gamepad.js', 'example\\gamepad.js')
 
 if __name__ == "__main__":
     sys.exit(main())
