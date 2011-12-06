@@ -14,10 +14,18 @@ gamepad.js
 Quick start
 -----------
 
-    Check if the browser supports gamepads with Gamepad.supported, and get
-    gamepads each requestAnimationFrame via Gamepad.getPads(). Returns an array
-    of gamepads that the user has interacted with (pressed a button at least
-    once).
+    Add
+        <script src=".../gamepad.js" type="text/javascript"></script>
+    to your html.
+
+    Check if the browser supports gamepads with
+
+        Gamepad.supported
+        
+    and if that's true, get gamepads each `window.requestAnimationFrame` via
+    `Gamepad.getPads()`. That returns an array of gamepads that the user has
+    interacted with (pressed a button at least once). Data available on each
+    item below.
 
 
 Raw data returned
