@@ -58,9 +58,9 @@
                     var stickouter = document.createElement('div');
                     stickouter.style.width = '256px';
                     stickouter.style.height = '256px';
-                    stickouter.style.float = 'left';
                     stickouter.style.border = '1px dotted #888';
                     stickouter.style.margin = '1em';
+                    stickouter.style.cssFloat = 'left';
                     stickouter.style.marginTop = '32px';
                     var stickimg = document.createElement('img');
                     stickimg.id = 'pad' + i + '_' + names[j];
@@ -75,7 +75,6 @@
                         pad.appendChild(document.createElement('br'));
                     var item = document.createElement('img');
                     item.style.width = '64px';
-                    item.style.clear = 'both';
                     item.id = 'pad' + i + '_' + name;
                     pad.appendChild(item);
                 }
