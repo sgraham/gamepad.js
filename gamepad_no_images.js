@@ -85,7 +85,7 @@
         into.name = "Xbox 360 Player " + (index + 1);
     };
 
-    var FirefoxWindowsXbox360Controller = function(raw, into, index) {
+    var FirefoxWindowsXbox360Controller = function(raw, into, index, deviceident) {
         // Wow, dinput is a disaster.
         into.leftStickX = raw.axes[0];
         into.leftStickY = raw.axes[1];
@@ -113,16 +113,22 @@
         into.deadZoneShoulder0 = 0.5;
         into.deadZoneShoulder1 = 30.0/255.0;
         into.images = Gamepad.ImageDataUrls_Xbox360;
-        into.name = "Xbox 360 Player " + (index + 1);
+        into.name = deviceident + " Player " + (index + 1);
     }
 
     var mapPad = function(raw, mapped) {
         if (isChrome && isWindows && contains(raw.id, 'XInput ') && contains(raw.id, 'GAMEPAD')) {
             ChromeWindowsXinputGamepad(raw, mapped, raw.index);
         } else if (isFirefox && isWindows && contains(raw.id, '45e-') && contains(raw.id, '28e-')) {
-            FirefoxWindowsXbox360Controller(raw, mapped, raw.index);
+            FirefoxWindowsXbox360Controller(raw, mapped, raw.index, "Xbox 360");
+        } else if (isFirefox && isWindows && contains(raw.id, '46d-') && contains(raw.id, 'c21e-')) {
+            FirefoxWindowsXbox360Controller(raw, mapped, raw.index, "Logitech F510");
+        } else if (isFirefox && isWindows && contains(raw.id, '46d-') && contains(raw.id, 'c21d-')) {
+            FirefoxWindowsXbox360Controller(raw, mapped, raw.index, "Logitech F310");
         } else {
+            mapped.name = "Unknown: " + raw.id;
             console.warn("Unrecognized pad type, not being mapped!");
+            console.warn(raw);
         }
 
         // todo; apply dead zones to mapped here
