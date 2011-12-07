@@ -41,6 +41,10 @@
     var isChrome = contains(userAgent, 'Chrome/');
     var isFirefox = contains(userAgent, 'Firefox/');
 
+    var axisToButton = function(value) {
+        return (value + 1.0) / 2.0;
+    }
+
     if (isFirefox) {
         // todo; current moz nightly does not define this, so we'll always
         // return true for .supported on that Firefox.
@@ -82,7 +86,7 @@
         into.deadZoneShoulder0 = 0.5;
         into.deadZoneShoulder1 = 30.0/255.0;
         into.images = Gamepad.ImageDataUrls_Xbox360;
-        into.name = "Xbox 360 Player " + (index + 1);
+        into.name = "Xbox 360 Player " + index;
     };
 
     var FirefoxWindowsXbox360Controller = function(raw, into, index, deviceident) {
@@ -113,25 +117,72 @@
         into.deadZoneShoulder0 = 0.5;
         into.deadZoneShoulder1 = 30.0/255.0;
         into.images = Gamepad.ImageDataUrls_Xbox360;
-        into.name = deviceident + " Player " + (index + 1);
+        into.name = deviceident + " Player " + index;
+    }
+
+    var FirefoxMacXbox360Controller = function(raw, into, index, deviceident) {
+        into.leftStickX = raw.axes[0];
+        into.leftStickY = raw.axes[1];
+        into.rightStickX = raw.axes[2];
+        into.rightStickY = raw.axes[3];
+        into.faceButton0 = raw.buttons[0];
+        into.faceButton1 = raw.buttons[1];
+        into.faceButton2 = raw.buttons[2];
+        into.faceButton3 = raw.buttons[3];
+        into.leftShoulder0 = raw.buttons[4];
+        into.rightShoulder0 = raw.buttons[5];
+        into.leftShoulder1 = axisToButton(raw.axes[4]);
+        into.rightShoulder1 = axisToButton(raw.axes[5]);
+        into.select = raw.buttons[9];
+        into.start = raw.buttons[8];
+        into.leftStickButton = raw.buttons[6];
+        into.rightStickButton = raw.buttons[7];
+        into.dpadUp = raw.buttons[11];
+        into.dpadDown = raw.buttons[12];
+        into.dpadLeft = raw.buttons[13];
+        into.dpadRight = raw.buttons[14];
+        // From http://msdn.microsoft.com/en-us/library/windows/desktop/ee417001(v=vs.85).aspx
+        into.deadZoneLeftStick = 7849.0/32767.0;
+        into.deadZoneRightStick = 8689/32767.0;
+        into.deadZoneShoulder0 = 0.5;
+        into.deadZoneShoulder1 = 30.0/255.0;
+        into.images = Gamepad.ImageDataUrls_Xbox360;
+        into.name = deviceident + " Player " + index;
+    };
+
+    var active = [];
+    // todo; PS3 is 054c, 0268
+    // todo; possible we need to add different deadzones based on controller
+    //       manufacturer, but perhaps they're fairly close anyway.
+    if (isChrome && isWindows) {
+        active.push([ 'XInput ', 'GAMEPAD', ChromeWindowsXinputGamepad ]);
+    } else if (isFirefox && isWindows) {
+        active.push([ '45e-', '2a1-', FirefoxWindowsXbox360Controller, "Xbox 360" ]);
+        active.push([ '45e-', '28e-', FirefoxWindowsXbox360Controller, "Xbox 360" ]);
+        active.push([ '46d-', 'c21d-', FirefoxWindowsXbox360Controller, "Logitech F310" ]);
+        active.push([ '46d-', 'c21e-', FirefoxWindowsXbox360Controller, "Logitech F510" ]);
+    } else if (isFirefox && isMac) {
+        active.push([ '45e-', '28e-', FirefoxMacXbox360Controller, "Xbox 360" ]);
     }
 
     var mapPad = function(raw, mapped) {
-        if (isChrome && isWindows && contains(raw.id, 'XInput ') && contains(raw.id, 'GAMEPAD')) {
-            ChromeWindowsXinputGamepad(raw, mapped, raw.index);
-        } else if (isFirefox && isWindows && contains(raw.id, '45e-') && contains(raw.id, '28e-')) {
-            FirefoxWindowsXbox360Controller(raw, mapped, raw.index, "Xbox 360");
-        } else if (isFirefox && isWindows && contains(raw.id, '46d-') && contains(raw.id, 'c21e-')) {
-            FirefoxWindowsXbox360Controller(raw, mapped, raw.index, "Logitech F510");
-        } else if (isFirefox && isWindows && contains(raw.id, '46d-') && contains(raw.id, 'c21d-')) {
-            FirefoxWindowsXbox360Controller(raw, mapped, raw.index, "Logitech F310");
-        } else {
-            mapped.name = "Unknown: " + raw.id;
-            console.warn("Unrecognized pad type, not being mapped!");
-            console.warn(raw);
+        var len = active.length;
+        for (var i = 0; i < len; ++i) {
+            var entry = active[i];
+            var ss1 = entry[0];
+            var ss2 = entry[1];
+            if (contains(raw.id, ss1) && contains(raw.id, ss2)) {
+                var handler = entry[2];
+                var rest = entry.slice(3);
+                rest.unshift(raw, mapped, raw.index + 1);
+                handler.apply(this, rest);
+                // todo; apply dead zones to mapped here
+                return;
+            }
         }
-
-        // todo; apply dead zones to mapped here
+        mapped.name = "Unknown: " + raw.id;
+        console.warn("Unrecognized pad type, not being mapped!");
+        console.warn(raw.id);
     };
 
     var curData = [];
@@ -143,8 +194,10 @@
         var len = rawPads.length;
         for (var i = 0; i < len; ++i) {
             var raw = rawPads[i];
-            if (!raw)
+            if (!raw) {
+                curData[i] = undefined;
                 continue;
+            }
             if (curData[i] === undefined)
                 curData[i] = new Item();
             mapPad(raw, curData[i]);
