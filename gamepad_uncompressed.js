@@ -120,19 +120,16 @@
         into.name = deviceident + " Player " + index;
     }
 
-    var FirefoxMacXbox360Controller = function(raw, into, index, deviceident) {
+    var CommonMacXbox360Controller = function(raw, into, index, deviceident) {
+        // NOTE: Doesn't set rightStick or triggers
         into.leftStickX = raw.axes[0];
         into.leftStickY = raw.axes[1];
-        into.rightStickX = raw.axes[2];
-        into.rightStickY = raw.axes[3];
         into.faceButton0 = raw.buttons[0];
         into.faceButton1 = raw.buttons[1];
         into.faceButton2 = raw.buttons[2];
         into.faceButton3 = raw.buttons[3];
         into.leftShoulder0 = raw.buttons[4];
         into.rightShoulder0 = raw.buttons[5];
-        into.leftShoulder1 = axisToButton(raw.axes[4]);
-        into.rightShoulder1 = axisToButton(raw.axes[5]);
         into.select = raw.buttons[9];
         into.start = raw.buttons[8];
         into.leftStickButton = raw.buttons[6];
@@ -148,6 +145,20 @@
         into.deadZoneShoulder1 = 30.0/255.0;
         into.images = Gamepad.ImageDataUrls_Xbox360;
         into.name = deviceident + " Player " + index;
+    }
+    var ChromeMacXbox360Controller = function(raw, into, index, deviceident) {
+        CommonMacXbox360Controller(raw, into, index, deviceident);
+        into.rightStickX = raw.axes[3];
+        into.rightStickY = raw.axes[4];
+        into.leftShoulder1 = axisToButton(raw.axes[2]);
+        into.rightShoulder1 = axisToButton(raw.axes[5]);
+    };
+    var FirefoxMacXbox360Controller = function(raw, into, index, deviceident) {
+        CommonMacXbox360Controller(raw, into, index, deviceident);
+        into.rightStickX = raw.axes[2];
+        into.rightStickY = raw.axes[3];
+        into.leftShoulder1 = axisToButton(raw.axes[4]);
+        into.rightShoulder1 = axisToButton(raw.axes[5]);
     };
 
     var active = [];
@@ -156,9 +167,12 @@
     //       manufacturer, but perhaps they're fairly close anyway.
     if (isChrome && isWindows) {
         active.push([ 'XInput ', 'GAMEPAD', ChromeWindowsXinputGamepad ]);
+    } else if (isChrome && isMac) {
+        active.push([ 'Vendor: 045e', 'Product: 028e', ChromeMacXbox360Controller, "Xbox 360" ]);
+        active.push([ 'Vendor: 045e', 'Product: 02a1', ChromeMacXbox360Controller, "Xbox 360" ]);
     } else if (isFirefox && isWindows) {
-        active.push([ '45e-', '2a1-', FirefoxWindowsXbox360Controller, "Xbox 360" ]);
         active.push([ '45e-', '28e-', FirefoxWindowsXbox360Controller, "Xbox 360" ]);
+        active.push([ '45e-', '2a1-', FirefoxWindowsXbox360Controller, "Xbox 360" ]);
         active.push([ '46d-', 'c21d-', FirefoxWindowsXbox360Controller, "Logitech F310" ]);
         active.push([ '46d-', 'c21e-', FirefoxWindowsXbox360Controller, "Logitech F510" ]);
     } else if (isFirefox && isMac) {

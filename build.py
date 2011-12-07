@@ -24,7 +24,7 @@ def main():
     # no idea.
     if sys.platform == 'win32' and platform.architecture()[0] == '64bit':
         javaPath = "c:\\windows\\SysWow64\\java.exe"
-    ret = os.system(javaPath + " -jar closure\\compiler.jar --js gamepad_uncompressed.js --js_output_file gamepad.js --compilation_level SIMPLE_OPTIMIZATIONS")
+    ret = os.system(javaPath + " -jar closure/compiler.jar --js gamepad_uncompressed.js --js_output_file gamepad.js --compilation_level SIMPLE_OPTIMIZATIONS")
     if ret != 0:
         return ret
 
