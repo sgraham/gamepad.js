@@ -11,14 +11,14 @@ def main():
     result = ''
     for device in os.listdir("images"):
         cur_dir = os.path.join("images", device)
-        result += "Gamepad.ImageDataUrls_%s = {};\n" % device
+        result += "var Gamepad_ImageDataUrls_%s = {};\n" % device
         for image in os.listdir(cur_dir):
             basename, ext = os.path.splitext(image)
             if ext == '.png':
                 data = base64.standard_b64encode(open(os.path.join(cur_dir, image), 'rb').read())
-                result += ("Gamepad.ImageDataUrls_%s['%s'] = 'data:image/png;base64,%s';\n" % (device, basename, data))
-    final = open("gamepad_no_images.js", "rb").read() + result
-    open("gamepad_uncompressed.js", "wb").write(final)
+                result += ("Gamepad_ImageDataUrls_%s.%s = 'data:image/png;base64,%s';\n" % (device, basename, data))
+    final = open("gamepad_no_images.js", "rb").read()
+    open("gamepad_uncompressed.js", "wb").write(final.replace("// @IMAGEDATAURLS@\n", result))
 
     javaPath = 'java'
     # no idea.
