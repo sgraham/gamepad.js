@@ -246,4 +246,7 @@
         active.push([ '45e-', '28e-', FirefoxMacXbox360Controller, "Xbox 360", Gamepad_ImageDataUrls_Xbox360 ]);
         active.push([ '54c-', '268-', FirefoxMacPS3Controller, "Playstation 3", Gamepad_ImageDataUrls_PS3 ]);
     }
+
+    window["Gamepad"].example_button0_0 = Gamepad_ImageDataUrls_Xbox360.faceButton0;
+    window["Gamepad"].example_button0_1 = Gamepad_ImageDataUrls_PS3.faceButton0;
 })();
