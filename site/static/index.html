@@ -1,0 +1,214 @@
+<!doctype html>
+<html>
+<head>
+    <link rel="stylesheet" href="gamepadjs.css" media="screen, projection">
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-27546073-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+</head>
+<body onload="setExampleImages()">
+    <h1>gamepad.js</h1>
+
+    <h2>About</h2>
+
+    <p><tt><a href="https://github.com/sgraham/gamepad.js/">gamepad.js</a></tt>
+    is a Javascript library to enable using gamepads and joysticks in
+    the browser.</p>
+    
+    <p>It smoothes over the differences between browsers, platforms,
+    APIs, and the wide variety of gamepad/joystick devices.</p>
+
+    <p>It offers two major features:</p>
+
+    <ul>
+
+        <li>A consistent mapping everywhere, so that you can simply
+        access attributes like <tt>.leftStickX</tt> or <tt>.dpadDown</tt>
+        rather than having to try to configure the device in your
+        game/program.</li>
+
+        <li>Images of the buttons/triggers/devices that correspond to
+        the actual device the user has in their hand, so that you can
+        offer intelligent prompts and help text. So, rather than "Press
+        Button 0", you can show a picture of the correct button.
+        For example:<br>
+        <img src="ex0_faceButton0.png"> or <img src="ex1_faceButton0.png">
+
+    </ul>
+
+    <h2 id="what-to-buy">What gamepad should I buy?</h2>
+
+    <p>The <strong>best overall answer</strong> is to get a
+    <a
+        href="http://www.amazon.com/gp/product/B003ZSN600/ref=as_li_qf_sp_asin_il_tl?ie=UTF8&tag=gamepadjs-20&linkCode=as2&camp=1789&creative=9325&creativeASIN=B003ZSN600">Wired
+        Xbox 360 Controller</a>. It
+    works out of the box on Windows XP, Windows Vista, Windows 7, and
+    popular Linux distributions. On Mac OS X, it first requires a <a
+        href="http://tattiebogle.net/index.php/ProjectRoot/Xbox360Controller/OsxDriver">driver
+        to be installed</a>, but works fine.
+    
+    <p>If you have an Xbox 360 console, and want to use the Xbox 360 wireless
+    controllers, you can instead get a <a
+        href="http://www.amazon.com/gp/product/B000HZFCT2/ref=as_li_qf_sp_asin_il_tl?ie=UTF8&tag=gamepadjs-20&linkCode=as2&camp=1789&creative=9325&creativeASIN=B000HZFCT2">Wireless
+        Gaming Receiver</a>, which lets them connect to the PC.</p>
+
+    <p>Other devices have varying support across platforms.</p>
+
+    <h3>Windows (XP/Vista/7)</h3>
+
+    <p>The best thing to do is to make sure that the gamepad supports
+    the &quot;XInput&quot; API. This is the newer standard for
+    communication between Windows and the controller.</p>
+
+    <p>In addition to the Xbox 360 controller above the following
+    devices support XInput so work well on Windows:</p>
+
+    <ul>
+        <li><a
+            href="http://www.amazon.com/gp/product/B003VAHYQY/ref=as_li_qf_sp_asin_il_tl?ie=UTF8&tag=gamepadjs-20&linkCode=as2&camp=1789&creative=9325&creativeASIN=B003VAHYQY">
+            Logitech Gamepad F310</a></li>
+        <li><a
+            href="http://www.amazon.com/gp/product/B003VAM392/ref=as_li_qf_sp_asin_il_tl?ie=UTF8&tag=gamepadjs-20&linkCode=as2&camp=1789&creative=9325&creativeASIN=B003VAM392">
+            Logitech Rumble Gamepad F510</a></li>
+        <li><a
+            href="http://www.amazon.com/gp/product/B0041RR0TW/ref=as_li_qf_sp_asin_il_tl?ie=UTF8&tag=gamepadjs-20&linkCode=as2&camp=1789&creative=9325&creativeASIN=B0041RR0TW">
+            Logitech Wireless Gamepad F710</a></li>
+        <li><a
+            href="http://www.amazon.com/gp/product/B002MX6TEE/ref=as_li_qf_sp_asin_il_tl?ie=UTF8&tag=gamepadjs-20&linkCode=as2&camp=1789&creative=9325&creativeASIN=B002MX6TEE">
+            MadCatz Xbox 360 Controller</a></li>
+    </ul>
+
+    <p><em>todo; add more verified devices here</em></p>
+
+    <p>Other controllers which emulate a 360 controller are relatively
+    likely to be problem-free also.</p>
+
+    <h3>Linux</h3>
+
+    <p>Generally speaking most devices will work out of the box in
+    Linux. So, getting one from above list of Windows-friendly devices
+    is probably a safe bet. Some of the more exotic or old devices may
+    not be mapped by <tt>gamepad.js</tt> but hopefully that will improve over
+    time (patches welcome!).
+    
+    <h3>Mac OS X</h3>
+
+    <p>The driver situation is a bit dismal on OS X. The best bet is
+    really to get a Wired Xbox 360 Controller as per above. Note that
+    not all the pseudo-360 controllers listed in the Windows section
+    will work. The safest bet is to get the &quot;real&quot; one.</p>
+
+    <p>Some people have also reported some success using Playstation 3
+    controllers, along with installing <a
+    href="http://tattiebogle.net/index.php/ProjectRoot/Ps3Controller">this
+    driver</a>.
+
+    <!--
+    <h3>Chrome OS, others</h3>
+
+    <p><em>todo;</em></p>
+    -->
+
+    <h2 id="browser-support">Browser support</h2>
+
+    <p><tt>gamepad.js</tt> relies on the browser having implemented the
+    <a
+    href="http://dvcs.w3.org/hg/webevents/raw-file/default/gamepad.html">Gamepad
+    API specification</a>. This specification is still being drafted, so
+    browser support is only in the early stages.</p>
+
+    <h3>Chrome/Chromium</h3>
+
+    <p>Currently supports the Gamepad API in <em>dev</em> channel on
+    Windows, and in <em>canary</em> on Mac OS X. If you're not
+    comfortable running &quot;beta&quot; quality software you should not
+    install these.</p>
+
+    <p>You must enable the Gamepad API by going to <tt>about:flags</tt>
+    and turning it on (near the bottom).</p>
+
+    <h3>Firefox</h3>
+
+    <p>Currently supported on Windows, Mac OS X, and Linux in a <a
+    href="http://people.mozilla.com/~tmielczarek/gamepad/">nightly
+    build</a>. If you're not comfortable running &quot;beta&quot;
+    quality software, you should not install these.</p>
+
+    <h3>Internet Explorer, Opera, Safari</h3>
+
+    <p>Currently unsupported.</p>
+
+    <h2>Example</h2>
+
+    <p>If you think you're all set, you can test your device/browser/OS
+    combination here: <a
+    href="http://sgraham.github.com/gamepad.js/example/">http://sgraham.github.com/gamepad.js/example/</a>.</p>
+
+    <h2 id="programming-api">Programming interface</h2>
+
+    <p>The programming interface for <tt>gamepad.js</tt> is
+    straightforward. First, include <tt>gamepad.js</tt> in your
+    html:</p>
+
+    <pre class="codeblock">
+&lt;script src=".../path/to/gamepad.js" type="text/javascript"&gt;&lt;/script&gt;</pre>
+
+    <p><tt>gamepad.js</tt> is a standalone file, and doesn't depend on any
+    other files or libraries, so you can just grab it and put it
+    somewhere convenient.</p>
+
+    <p>Check for support:</p>
+
+    <pre class="codeblock">
+if (Gamepad.supported) {
+    // Ready to rock!
+} else {
+    // Fallback or encourage user to bug their browser vendor
+}</pre>
+
+    <p>Then, during your <tt>window.requestAnimationFrame</tt> callback,
+    do:</p>
+
+    <pre class="codeblock">
+var pads = Gamepad.getPads();
+for (var i = 0; i &lt; pads.length; ++i) {
+    if (pads[i]) {
+        console.log(i + ": (" + pads[i].leftStickX + ", " + pads[i].leftStickY + ")");
+    }
+}
+</pre>
+
+    <p>The list of available attributes on the returned array of pads
+    and the range of values can be <a
+        href="https://github.com/sgraham/gamepad.js">found here</a>.
+
+    <h2>Users</h2>
+
+    <p>Made a <tt>gamepad.js</tt> app? Drop me a line and I'll add you to
+    the list:</p>
+
+    <ul>
+
+        <li><a href="http://boxes-wot-shoot.appspot.com/">Boxes Wot
+            Shoot</a> (requires WebGL)</li>
+
+    </ul>
+
+    <h2>Feedback</h2>
+
+    <p> No group/list yet, you can use the <a
+        href="https://github.com/sgraham/gamepad.js/issues">Issues
+        tracker</a> on github, or mail <tt>scott@gamepadjs.com</tt> for
+    now.</p>
+
+</body>
+</html>

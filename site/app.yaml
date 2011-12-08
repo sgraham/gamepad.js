@@ -1,0 +1,13 @@
+application: gamepadjs
+version: 1
+runtime: python
+api_version: 1
+
+handlers:
+- url: (.*)/
+  static_files: static\1/index.html
+  upload: (.*)/index.html
+
+- url: /(.*)
+  static_files: static/\1
+  upload: (.*)
