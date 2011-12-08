@@ -166,7 +166,7 @@
     }
 
     var CommonMacXbox360Controller = function(raw, into, index) {
-        // NOTE: Doesn't set rightStick or triggers
+        // NOTE: Partial, doesn't set all values.
         into.leftStickX = raw.axes[0];
         into.leftStickY = raw.axes[1];
         into.faceButton0 = raw.buttons[0];
@@ -190,25 +190,25 @@
         into.deadZoneShoulder1 = 30.0/255.0;
     }
     var ChromeMacXbox360Controller = function(raw, into, index) {
-        CommonMacXbox360Controller(raw, into, index, deviceident);
+        CommonMacXbox360Controller(raw, into, index);
         into.rightStickX = raw.axes[3];
         into.rightStickY = raw.axes[4];
         into.leftShoulder1 = axisToButton(raw.axes[2]);
         into.rightShoulder1 = axisToButton(raw.axes[5]);
     };
     var FirefoxMacXbox360Controller = function(raw, into, index) {
-        CommonMacXbox360Controller(raw, into, index, deviceident);
+        CommonMacXbox360Controller(raw, into, index);
         into.rightStickX = raw.axes[2];
         into.rightStickY = raw.axes[3];
         into.leftShoulder1 = axisToButton(raw.axes[4]);
         into.rightShoulder1 = axisToButton(raw.axes[5]);
     };
 
-    var FirefoxMacPS3Controller = function(raw, into, index) {
+    var CommonMacPS3Controller = function(Raw, into, index) {
+        // NOTE: Partial, doesn't set all values.
         into.leftStickX = raw.axes[0];
         into.leftStickY = raw.axes[1];
         into.rightStickX = raw.axes[2];
-        into.rightStickY = raw.axes[3];
         into.faceButton0 = raw.buttons[14];
         into.faceButton1 = raw.buttons[13];
         into.faceButton2 = raw.buttons[15];
@@ -225,7 +225,17 @@
         into.dpadDown = raw.buttons[6];
         into.dpadLeft = raw.buttons[7];
         into.dpadRight = raw.buttons[5];
-    }
+    };
+
+    var FirefoxMacPS3Controller = function(raw, into, index) {
+        CommonMacPS3Controller(raw, into, index);
+        into.rightStickY = raw.axes[3];
+    };
+
+    var ChromeMacPS3Controller = function(raw, into, index) {
+        into.rightStickY = raw.axes[5];
+    };
+
 
 // @IMAGEDATAURLS@
 
@@ -237,6 +247,7 @@
     } else if (isChrome && isMac) {
         active.push([ 'Vendor: 045e', 'Product: 028e', ChromeMacXbox360Controller, "Xbox 360", Gamepad_ImageDataUrls_Xbox360 ]);
         active.push([ 'Vendor: 045e', 'Product: 02a1', ChromeMacXbox360Controller, "Xbox 360", Gamepad_ImageDataUrls_Xbox360 ]);
+        active.push([ 'Vendor: 054c', 'Product: 0268', ChromeMacPS3Controller, "Playstation 3", Gamepad_ImageDataUrls_PS3 ]);
     } else if (isFirefox && isWindows) {
         active.push([ '45e-', '28e-', FirefoxWindowsXbox360Controller, "Xbox 360", Gamepad_ImageDataUrls_Xbox360 ]);
         active.push([ '45e-', '2a1-', FirefoxWindowsXbox360Controller, "Xbox 360", Gamepad_ImageDataUrls_Xbox360 ]);

@@ -166,7 +166,7 @@
     }
 
     var CommonMacXbox360Controller = function(raw, into, index) {
-        // NOTE: Doesn't set rightStick or triggers
+        // NOTE: Partial, doesn't set all values.
         into.leftStickX = raw.axes[0];
         into.leftStickY = raw.axes[1];
         into.faceButton0 = raw.buttons[0];
@@ -190,25 +190,25 @@
         into.deadZoneShoulder1 = 30.0/255.0;
     }
     var ChromeMacXbox360Controller = function(raw, into, index) {
-        CommonMacXbox360Controller(raw, into, index, deviceident);
+        CommonMacXbox360Controller(raw, into, index);
         into.rightStickX = raw.axes[3];
         into.rightStickY = raw.axes[4];
         into.leftShoulder1 = axisToButton(raw.axes[2]);
         into.rightShoulder1 = axisToButton(raw.axes[5]);
     };
     var FirefoxMacXbox360Controller = function(raw, into, index) {
-        CommonMacXbox360Controller(raw, into, index, deviceident);
+        CommonMacXbox360Controller(raw, into, index);
         into.rightStickX = raw.axes[2];
         into.rightStickY = raw.axes[3];
         into.leftShoulder1 = axisToButton(raw.axes[4]);
         into.rightShoulder1 = axisToButton(raw.axes[5]);
     };
 
-    var FirefoxMacPS3Controller = function(raw, into, index) {
+    var CommonMacPS3Controller = function(Raw, into, index) {
+        // NOTE: Partial, doesn't set all values.
         into.leftStickX = raw.axes[0];
         into.leftStickY = raw.axes[1];
         into.rightStickX = raw.axes[2];
-        into.rightStickY = raw.axes[3];
         into.faceButton0 = raw.buttons[14];
         into.faceButton1 = raw.buttons[13];
         into.faceButton2 = raw.buttons[15];
@@ -225,7 +225,17 @@
         into.dpadDown = raw.buttons[6];
         into.dpadLeft = raw.buttons[7];
         into.dpadRight = raw.buttons[5];
-    }
+    };
+
+    var FirefoxMacPS3Controller = function(raw, into, index) {
+        CommonMacPS3Controller(raw, into, index);
+        into.rightStickY = raw.axes[3];
+    };
+
+    var ChromeMacPS3Controller = function(raw, into, index) {
+        into.rightStickY = raw.axes[5];
+    };
+
 
 var Gamepad_ImageDataUrls_PS3 = {};
 Gamepad_ImageDataUrls_PS3.faceButton0 = 'data:image/png;base64,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';
@@ -281,6 +291,7 @@ Gamepad_ImageDataUrls_Xbox360.start = 'data:image/png;base64,iVBORw0KGgoAAAANSUh
     } else if (isChrome && isMac) {
         active.push([ 'Vendor: 045e', 'Product: 028e', ChromeMacXbox360Controller, "Xbox 360", Gamepad_ImageDataUrls_Xbox360 ]);
         active.push([ 'Vendor: 045e', 'Product: 02a1', ChromeMacXbox360Controller, "Xbox 360", Gamepad_ImageDataUrls_Xbox360 ]);
+        active.push([ 'Vendor: 054c', 'Product: 0268', ChromeMacPS3Controller, "Playstation 3", Gamepad_ImageDataUrls_PS3 ]);
     } else if (isFirefox && isWindows) {
         active.push([ '45e-', '28e-', FirefoxWindowsXbox360Controller, "Xbox 360", Gamepad_ImageDataUrls_Xbox360 ]);
         active.push([ '45e-', '2a1-', FirefoxWindowsXbox360Controller, "Xbox 360", Gamepad_ImageDataUrls_Xbox360 ]);
