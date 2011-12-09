@@ -5,7 +5,7 @@
         return navigator.webkitGamepads || navigator.mozGamepads || navigator.gamepads;
     };
 
-    function Item() {
+    var Item = function() {
         this.leftStickX = 0.0;
         this.leftStickY = 0.0;
         this.rightStickX = 0.0;
@@ -32,7 +32,30 @@
         this.deadZoneShoulder1 = 0.0;
         this.images = Gamepad.ImageDataUrls_Unknown;
         this.name = "Unknown";
-    }
+    };
+
+    var deepCopy = function(into, from) {
+        into.leftStickX = from.leftStickX;
+        into.leftStickY = from.leftStickY;
+        into.rightStickX = from.rightStickX;
+        into.rightStickY = from.rightStickY;
+        into.faceButton0 = from.faceButton0;
+        into.faceButton1 = from.faceButton1;
+        into.faceButton2 = from.faceButton2;
+        into.faceButton3 = from.faceButton3;
+        into.leftShoulder0 = from.leftShoulder0;
+        into.rightShoulder0 = from.rightShoulder0;
+        into.leftShoulder1 = from.leftShoulder1;
+        into.rightShoulder1 = from.rightShoulder1;
+        into.select = from.select;
+        into.start = from.start;
+        into.leftStickButton = from.leftStickButton;
+        into.rightStickButton = from.rightStickButton;
+        into.dpadUp = from.dpadUp;
+        into.dpadDown = from.dpadDown;
+        into.dpadLeft = from.dpadLeft;
+        into.dpadRight = from.dpadRight;
+    };
 
     var contains = function(lookIn, forWhat) { return lookIn.indexOf(forWhat) != -1; };
     var userAgent = navigator.userAgent;
@@ -80,26 +103,49 @@
         console.warn(raw.id);
     };
 
+    var mapIndividualPad = function(rawPads, i) {
+        var raw = rawPads[i];
+        if (!raw) {
+            prevData[i] = undefined;
+            curData[i] = undefined;
+            return;
+        }
+        if (curData[i] === undefined) {
+            prevData[i] = new Item();
+            curData[i] = new Item();
+        }
+        deepCopy(prevData[i], curData[i]);
+        mapPad(raw, curData[i]);
+    };
+
+    var prevData = [];
     var curData = [];
     var Gamepad = {};
-    window["Gamepad"] = Gamepad;
-    Gamepad['getPads'] = function() {
-        var result = [];
+    window.Gamepad = Gamepad;
+    Gamepad.getPreviousStates = function() {
+        return prevData;
+    };
+    Gamepad.getStates = function() {
         var rawPads = getField()
         var len = rawPads.length;
         for (var i = 0; i < len; ++i) {
-            var raw = rawPads[i];
-            if (!raw) {
-                curData[i] = undefined;
-                continue;
-            }
-            if (curData[i] === undefined)
-                curData[i] = new Item();
-            mapPad(raw, curData[i]);
+            mapIndividualPad(rawPads, i);
+        }
+        for (; i < curData.length; ++i) {
+            prevData[i] = undefined;
+            curData[i] = undefined;
         }
         return curData;
     };
-    Gamepad['supported'] = getField() != undefined;
+    Gamepad.getPreviousState = function(i) {
+        return prevData[i];
+    };
+    Gamepad.getState = function(i) {
+        var rawPads = getField();
+        mapIndividualPad(rawPads, i);
+        return curData[i];
+    };
+    Gamepad.supported = getField() != undefined;
 
 
     // todo; These sort of seems like it could be data, but there's actually a

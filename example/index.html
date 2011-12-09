@@ -84,7 +84,7 @@
         function update() {
             window.requestAnimationFrame(update);
 
-            var pads = Gamepad.getPads();
+            var pads = Gamepad.getStates();
             for (var i = 0; i < pads.length; ++i) {
                 var pad = pads[i];
                 if (pad) {
