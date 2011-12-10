@@ -178,7 +178,7 @@ if (Gamepad.supported) {
     do:</p>
 
     <pre class="codeblock">
-var pads = Gamepad.getPads();
+var pads = Gamepad.getStates();
 for (var i = 0; i &lt; pads.length; ++i) {
     if (pads[i]) {
         console.log(i + ": (" + pads[i].leftStickX + ", " + pads[i].leftStickY + ")");

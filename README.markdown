@@ -20,10 +20,11 @@ Add
 
 to your html.
 
-Check if the browser supports gamepads via `Gamepad.supported`. If that's true,
-get gamepad data each `window.requestAnimationFrame` via `Gamepad.getPads()`.
-`getPads` returns an array of gamepads that the user has interacted with
-(pressed a button at least once). Data available on each gamepad detailed below.
+Check if the browser supports gamepads via `Gamepad.supported`. If
+that's true, get gamepad data each `window.requestAnimationFrame` via
+`Gamepad.getStates()`. `getStates` returns an array of gamepads that the
+user has interacted with (pressed a button at least once). Data
+available on each gamepad detailed below.
 
 
 Per-gamepad data
@@ -64,6 +65,13 @@ player+controller (e.g. "Xbox 360 #1")
 
 The stick and shoulder data are dead-zoned in a 2D fashion, according to
 recommended tolerances.
+
+There are also additional access points for getting data:
+`Gamepad.getState(index)` which retrieves only a particular gamepad, and
+`Gamepad.getPreviousStates()` and `Gamepad.getPreviousState(index)`,
+which retrieve the state of the gamepad(s) from the previous frame.
+These can be useful for edge-triggered transitions (i.e. button-went-up
+as opposed to button-is-up).
 
 
 Button images

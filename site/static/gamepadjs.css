@@ -131,7 +131,7 @@ border-left : 1px dotted #a8a8a8;
 line-height : 1.5; }
 
 pre, code, tt {
-font : 1em 'consolas', 'monaco', monospace; }
+font : 1em 'lucida console', 'andale mono', monospace; }
 
 pre { 
 white-space : pre; }
