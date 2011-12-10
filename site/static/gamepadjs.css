@@ -74,6 +74,9 @@ font-size : 1em; }
 h1 img, h2 img, h3 img, h4 img, h5 img, h6 img { 
 margin : 0; }
 
+img {
+vertical-align: middle; }
+
 /* Text elements -------------------------------------------------------------- */
 
 p { 
