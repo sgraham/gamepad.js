@@ -235,6 +235,7 @@
         into.deadZoneShoulder0 = 0.5;
         into.deadZoneShoulder1 = 30.0/255.0;
     }
+
     var ChromeMacXbox360Controller = function(raw, into, index) {
         CommonMacXbox360Controller(raw, into, index);
         into.rightStickX = raw.axes[2];
@@ -250,6 +251,7 @@
         into.dpadLeft = raw.buttons[14];
         into.dpadRight = raw.buttons[15];
     };
+
     var FirefoxMacXbox360Controller = function(raw, into, index) {
         CommonMacXbox360Controller(raw, into, index);
         into.rightStickX = raw.axes[2];
