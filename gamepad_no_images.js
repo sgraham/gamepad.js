@@ -237,10 +237,18 @@
     }
     var ChromeMacXbox360Controller = function(raw, into, index) {
         CommonMacXbox360Controller(raw, into, index);
-        into.rightStickX = raw.axes[3];
-        into.rightStickY = raw.axes[4];
-        into.leftShoulder1 = axisToButton(raw.axes[2]);
-        into.rightShoulder1 = axisToButton(raw.axes[5]);
+        into.rightStickX = raw.axes[2];
+        into.rightStickY = raw.axes[3];
+        into.leftShoulder1 = raw.buttons[6];
+        into.rightShoulder1 = raw.buttons[7];
+        into.leftStickButton = raw.buttons[10];
+        into.rightStickButton = raw.buttons[11];
+        into.select = raw.buttons[8];
+        into.start = raw.buttons[9];
+        into.dpadUp = raw.buttons[12];
+        into.dpadDown = raw.buttons[13];
+        into.dpadLeft = raw.buttons[14];
+        into.dpadRight = raw.buttons[15];
     };
     var FirefoxMacXbox360Controller = function(raw, into, index) {
         CommonMacXbox360Controller(raw, into, index);
