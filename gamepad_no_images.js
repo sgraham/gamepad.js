@@ -281,6 +281,39 @@
         into.dpadRight = raw.buttons[5];
     };
 
+    var ChromeMacLogitechF310Controller = function(raw, into, index) {
+        into.leftStickX = raw.axes[0];
+        into.leftStickY = raw.axes[1];
+        into.faceButton0 = raw.buttons[1];
+        into.faceButton1 = raw.buttons[2];
+        into.faceButton2 = raw.buttons[0];
+        into.faceButton3 = raw.buttons[3];
+        into.leftShoulder0 = raw.buttons[4];
+        into.rightShoulder0 = raw.buttons[5];
+        into.select = raw.buttons[8];
+        into.start = raw.buttons[9];
+        into.leftStickButton = raw.buttons[10];
+        into.rightStickButton = raw.buttons[11];
+
+        // There is a switch to toggle the left joystick and dpad
+        // only one is enabled at a time and the output always goes
+        // through the left joystick
+        into.dpadUp =  0;
+        into.dpadDown = 0;
+        into.dpadLeft = 0;
+        into.dpadRight = 0;
+
+        into.deadZoneLeftStick = 7849.0/32767.0;
+        into.deadZoneRightStick = 8689/32767.0;
+        into.deadZoneShoulder0 = 0.5;
+        into.deadZoneShoulder1 = 30.0/255.0;
+        console.log(raw.axes);
+        into.rightStickX = raw.axes[2];
+        into.rightStickY = raw.axes[5];
+        into.leftShoulder1 = raw.buttons[6];
+        into.rightShoulder1 = raw.buttons[7];
+    };
+
     var FirefoxMacPS3Controller = function(raw, into, index) {
         CommonMacPS3Controller(raw, into, index);
         into.rightStickY = raw.axes[3];
@@ -302,6 +335,7 @@
         active.push([ 'Vendor: 045e', 'Product: 028e', ChromeMacXbox360Controller, "Xbox 360", Gamepad_ImageDataUrls_Xbox360 ]);
         active.push([ 'Vendor: 045e', 'Product: 02a1', ChromeMacXbox360Controller, "Xbox 360", Gamepad_ImageDataUrls_Xbox360 ]);
         active.push([ 'Vendor: 054c', 'Product: 0268', ChromeMacPS3Controller, "Playstation 3", Gamepad_ImageDataUrls_PS3 ]);
+        active.push([ 'Vendor: 046d', 'Product: c216', ChromeMacLogitechF310Controller, "Logitech F310", Gamepad_ImageDataUrls_Xbox360 ]);
     } else if (isFirefox && isWindows) {
         active.push([ '45e-', '28e-', FirefoxWindowsXbox360Controller, "Xbox 360", Gamepad_ImageDataUrls_Xbox360 ]);
         active.push([ '45e-', '2a1-', FirefoxWindowsXbox360Controller, "Xbox 360", Gamepad_ImageDataUrls_Xbox360 ]);
