@@ -258,7 +258,7 @@
         into.rightShoulder1 = axisToButton(raw.axes[5]);
     };
 
-    var CommonMacPS3Controller = function(Raw, into, index) {
+    var CommonMacPS3Controller = function(raw, into, index) {
         // NOTE: Partial, doesn't set all values.
         into.leftStickX = raw.axes[0];
         into.leftStickY = raw.axes[1];
