@@ -1,6 +1,6 @@
 /** @license gamepad.js, See README for copyright and usage instructions.
 */
-(function() {
+(function(undefined) {
     var getField = function() {
         return navigator.webkitGamepads || navigator.mozGamepads || navigator.gamepads;
     };
@@ -61,12 +61,13 @@
     var userAgent = navigator.userAgent;
     var isWindows = contains(userAgent, 'Windows NT');
     var isMac = contains(userAgent, 'Macintosh');
+    var isLinux = contains(userAgent, 'Linux');
     var isChrome = contains(userAgent, 'Chrome/');
     var isFirefox = contains(userAgent, 'Firefox/');
 
     var axisToButton = function(value) {
         return (value + 1.0) / 2.0;
-    }
+    };
 
     if (isFirefox) {
         // todo; current moz nightly does not define this, so we'll always
@@ -74,10 +75,10 @@
         navigator.mozGamepads = [];
         var mozConnectHandler = function(e) {
             navigator.mozGamepads[e.gamepad.index] = e.gamepad;
-        }
+        };
         var mozDisconnectHandler = function(e) {
             navigator.mozGamepads[e.gamepad.index] = undefined;
-        }
+        };
         window.addEventListener("MozGamepadConnected", mozConnectHandler);
         window.addEventListener("MozGamepadDisconnected", mozDisconnectHandler);
     }
@@ -100,7 +101,7 @@
         }
         mapped.name = "Unknown: " + raw.id;
         //console.warn("Unrecognized pad type, not being mapped!");
-        //console.warn(raw.id);
+        //console.warn(JSON.stringify(raw.id));
     };
 
     var mapIndividualPad = function(rawPads, i) {
@@ -126,7 +127,7 @@
         return prevData;
     };
     Gamepad.getStates = function() {
-        var rawPads = getField()
+        var rawPads = getField();
         var len = rawPads.length;
         for (var i = 0; i < len; ++i) {
             mapIndividualPad(rawPads, i);
@@ -145,7 +146,7 @@
         mapIndividualPad(rawPads, i);
         return curData[i];
     };
-    Gamepad.supported = getField() != undefined;
+    Gamepad.supported = getField() !== undefined;
 
 
     // todo; These sort of seems like it could be data, but there's actually a
@@ -209,7 +210,7 @@
         into.deadZoneRightStick = 8689/32767.0;
         into.deadZoneShoulder0 = 0.5;
         into.deadZoneShoulder1 = 30.0/255.0;
-    }
+    };
 
     var CommonMacXbox360Controller = function(raw, into, index) {
         // NOTE: Partial, doesn't set all values.
@@ -234,7 +235,7 @@
         into.deadZoneRightStick = 8689/32767.0;
         into.deadZoneShoulder0 = 0.5;
         into.deadZoneShoulder1 = 30.0/255.0;
-    }
+    };
 
     var ChromeMacXbox360Controller = function(raw, into, index) {
         CommonMacXbox360Controller(raw, into, index);
@@ -285,7 +286,7 @@
         into.rightShoulder1 = axisToButton(raw.axes[5]);
     };
 
-    var CommonMacPS3Controller = function(Raw, into, index) {
+    var CommonMacPS3Controller = function(raw, into, index) {
         // NOTE: Partial, doesn't set all values.
         into.leftStickX = raw.axes[0];
         into.leftStickY = raw.axes[1];
@@ -315,6 +316,11 @@
 
     var ChromeMacPS3Controller = function(raw, into, index) {
         into.rightStickY = raw.axes[5];
+    };
+
+    var ChromeLinuxXbox360Controller = function(raw, into, index) {
+        ChromeWindowsXinputGamepad(raw, into, index);
+        into.xboxButton = raw.buttons[16];
     };
 
 
@@ -382,5 +388,8 @@ Gamepad_ImageDataUrls_Xbox360.start = 'data:image/png;base64,iVBORw0KGgoAAAANSUh
     } else if (isFirefox && isMac) {
         active.push([ '45e-', '28e-', FirefoxMacXbox360Controller, "Xbox 360", Gamepad_ImageDataUrls_Xbox360 ]);
         active.push([ '54c-', '268-', FirefoxMacPS3Controller, "Playstation 3", Gamepad_ImageDataUrls_PS3 ]);
+    } else if (isChrome && isLinux) {
+        active.push([ 'Vendor: 045e', 'Product: 028e', ChromeLinuxXbox360Controller, "Xbox 360", Gamepad_ImageDataUrls_Xbox360 ]);
+        active.push([ 'Vendor: 045e', 'Product: 02a1', ChromeLinuxXbox360Controller, "Xbox 360", Gamepad_ImageDataUrls_Xbox360 ]);
     }
 })();

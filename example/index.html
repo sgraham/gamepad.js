@@ -1,7 +1,9 @@
 <!doctype html>
 <html>
 <head>
-    <script src="../gamepad.js"></script>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <title>Gamepad.js Demo</title>
+    <script src="../gamepad_uncompressed.js"></script>
 </head>
 <body>
     <h1 id='title'></h1>
@@ -81,8 +83,16 @@
             }
         }
 
+        if (!Date.now) Date.now = function () { return new Date().getTime(); };
+        var lastTime = Date.now();
         function update() {
             window.requestAnimationFrame(update);
+            // limit framerate:
+            var time = Date.now();
+            if ((time - lastTime) < 100/3) {
+                return;
+            }
+            lastTime = time;
 
             var pads = Gamepad.getStates();
             for (var i = 0; i < pads.length; ++i) {
