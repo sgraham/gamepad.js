@@ -1,3 +1,4 @@
+#!/usr/bin/python
 # Simple script to slurp all the icons we have, convert them to data urls, and
 # append to gamepad_no_images.js to create the final gamepad.js that most
 # people will want to use.
@@ -24,6 +25,8 @@ def main():
     # no idea.
     if sys.platform == 'win32' and platform.architecture()[0] == '64bit':
         javaPath = "c:\\windows\\SysWow64\\java.exe"
+    else:
+        javaPath = "java"
     ret = os.system(javaPath + " -jar closure/compiler.jar --js gamepad_uncompressed.js --js_output_file gamepad.js --compilation_level SIMPLE_OPTIMIZATIONS")
     if ret != 0:
         return ret
