@@ -61,6 +61,7 @@
     var userAgent = navigator.userAgent;
     var isWindows = contains(userAgent, 'Windows NT');
     var isMac = contains(userAgent, 'Macintosh');
+    var isLinux = contains(userAgent, 'Linux');
     var isChrome = contains(userAgent, 'Chrome/');
     var isFirefox = contains(userAgent, 'Firefox/');
 
@@ -314,6 +315,36 @@
         into.leftShoulder1 = raw.buttons[6];
         into.rightShoulder1 = raw.buttons[7];
     };
+    
+    var ChromeLinuxXbox360Controller = function(raw, into, index) {
+        // NOTE: this is essentially the same as XInput + the xbox button
+        into.leftStickX = raw.axes[0];
+        into.leftStickY = raw.axes[1];
+        into.rightStickX = raw.axes[2];
+        into.rightStickY = raw.axes[3];
+        into.faceButton0 = raw.buttons[0];
+        into.faceButton1 = raw.buttons[1];
+        into.faceButton2 = raw.buttons[2];
+        into.faceButton3 = raw.buttons[3];
+        into.leftShoulder0 = raw.buttons[4];
+        into.rightShoulder0 = raw.buttons[5];
+        into.leftShoulder1 = raw.buttons[6];
+        into.rightShoulder1 = raw.buttons[7];
+        into.select = raw.buttons[8];
+        into.start = raw.buttons[9];
+        into.leftStickButton = raw.buttons[10];
+        into.rightStickButton = raw.buttons[11];
+        into.dpadUp = raw.buttons[12];
+        into.dpadDown = raw.buttons[13];
+        into.dpadLeft = raw.buttons[14];
+        into.dpadRight = raw.buttons[15];
+        into.xboxButton = raw.buttons[16];
+        // From http://msdn.microsoft.com/en-us/library/windows/desktop/ee417001(v=vs.85).aspx
+        into.deadZoneLeftStick = 7849.0/32767.0;
+        into.deadZoneRightStick = 8689/32767.0;
+        into.deadZoneShoulder0 = 0.5;
+        into.deadZoneShoulder1 = 30.0/255.0;
+    };
 
 
 var Gamepad_ImageDataUrls_Xbox360 = {};
@@ -380,5 +411,8 @@ Gamepad_ImageDataUrls_Unknown.rightStick = 'data:image/png;base64,iVBORw0KGgoAAA
     } else if (isFirefox && isMac) {
         active.push([ '45e-', '28e-', FirefoxMacXbox360Controller, "Xbox 360", Gamepad_ImageDataUrls_Xbox360 ]);
         active.push([ '54c-', '268-', FirefoxMacPS3Controller, "Playstation 3", Gamepad_ImageDataUrls_PS3 ]);
+    } else if (isChrome && isLinux) {
+        active.push([ 'Vendor: 045e', 'Product: 028e', ChromeLinuxXbox360Controller, "Xbox 360", Gamepad_ImageDataUrls_Xbox360 ]);
+        active.push([ 'Vendor: 045e', 'Product: 02a1', ChromeLinuxXbox360Controller, "Xbox 360", Gamepad_ImageDataUrls_Xbox360 ]);
     }
 })();
