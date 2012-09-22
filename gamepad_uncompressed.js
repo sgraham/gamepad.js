@@ -4,6 +4,10 @@
     var getField = function() {
         return navigator.webkitGamepads || navigator.mozGamepads || navigator.gamepads;
     };
+    
+    var getFunction = function () {
+        return navigator.webkitGetGamepads || navigator.mozGetGamepads || navigator.getGamepads;
+    };
 
     var Item = function() {
         this.leftStickX = 0.0;
@@ -126,8 +130,16 @@
     Gamepad.getPreviousStates = function() {
         return prevData;
     };
+    Gamepad.getRawState = function () {
+        var getRawPads = getFunction();
+        var rawPads = getField();
+        if ((!rawPads) && (getRawPads)) {
+            rawPads = getRawPads.call(navigator)
+        }
+        return rawPads;
+    }
     Gamepad.getStates = function() {
-        var rawPads = getField()
+        var rawPads = Gamepad.getRawState();
         var len = rawPads.length;
         for (var i = 0; i < len; ++i) {
             mapIndividualPad(rawPads, i);
@@ -142,11 +154,11 @@
         return prevData[i];
     };
     Gamepad.getState = function(i) {
-        var rawPads = getField();
+        var rawPads = Gamepad.getRawState();
         mapIndividualPad(rawPads, i);
         return curData[i];
     };
-    Gamepad.supported = getField() != undefined;
+    Gamepad.supported = (getField() != undefined) || (getFunction() != undefined);
 
 
     // todo; These sort of seems like it could be data, but there's actually a
