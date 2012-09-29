@@ -63,6 +63,7 @@
     var isMac = contains(userAgent, 'Macintosh');
     var isChrome = contains(userAgent, 'Chrome/');
     var isFirefox = contains(userAgent, 'Firefox/');
+    var isLinux = contains(userAgent, 'Linux');
 
     var axisToButton = function(value) {
         return (value + 1.0) / 2.0;
@@ -235,6 +236,7 @@
         into.deadZoneShoulder0 = 0.5;
         into.deadZoneShoulder1 = 30.0/255.0;
     }
+
     var ChromeMacXbox360Controller = function(raw, into, index) {
         CommonMacXbox360Controller(raw, into, index);
         into.rightStickX = raw.axes[3];
@@ -242,6 +244,73 @@
         into.leftShoulder1 = axisToButton(raw.axes[2]);
         into.rightShoulder1 = axisToButton(raw.axes[5]);
     };
+
+    var ChromeLinuxLogitechDualActionController = function(raw, into, index) {
+        into.leftStickX = raw.axes[0];
+        into.leftStickY = raw.axes[1];
+
+        into.faceButton0 = raw.buttons[1];
+        into.faceButton1 = raw.buttons[2];
+        into.faceButton2 = raw.buttons[0];
+        into.faceButton3 = raw.buttons[3];
+	
+        into.leftShoulder0 = raw.buttons[4];
+        into.rightShoulder0 = raw.buttons[5];
+        into.select = raw.buttons[8];
+        into.start = raw.buttons[9];
+        into.leftStickButton = raw.buttons[10];
+        into.rightStickButton = raw.buttons[11];
+
+        into.dpadUp = raw.axes[5] < -0.5 ? 1 : 0;
+        into.dpadDown = raw.axes[5] > 0.5 ? 1 : 0;
+        into.dpadLeft = raw.axes[4] < -0.5 ? 1 : 0;
+        into.dpadRight = raw.axes[4] > 0.5 ? 1 : 0;
+
+        into.deadZoneLeftStick = 7849.0/32767.0;
+        into.deadZoneRightStick = 8689/32767.0;
+        into.deadZoneShoulder0 = 0.5;
+        into.deadZoneShoulder1 = 30.0/255.0;
+
+        // console.log(raw.axes);
+        into.rightStickX = raw.axes[2];
+        into.rightStickY = raw.axes[3];
+        into.leftShoulder1 = raw.buttons[6];
+        into.rightShoulder1 = raw.buttons[7];
+    };
+
+    var ChromeMacLogitechF310Controller = function(raw, into, index) {
+        into.leftStickX = raw.axes[0];
+        into.leftStickY = raw.axes[1];
+        into.faceButton0 = raw.buttons[1];
+        into.faceButton1 = raw.buttons[2];
+        into.faceButton2 = raw.buttons[0];
+        into.faceButton3 = raw.buttons[3];
+        into.leftShoulder0 = raw.buttons[4];
+        into.rightShoulder0 = raw.buttons[5];
+        into.select = raw.buttons[8];
+        into.start = raw.buttons[9];
+        into.leftStickButton = raw.buttons[10];
+        into.rightStickButton = raw.buttons[11];
+
+        // There is a switch to toggle the left joystick and dpad
+        // only one is enabled at a time and the output always goes
+        // through the left joystick
+        into.dpadUp =  0;
+        into.dpadDown = 0;
+        into.dpadLeft = 0;
+        into.dpadRight = 0;
+
+        into.deadZoneLeftStick = 7849.0/32767.0;
+        into.deadZoneRightStick = 8689/32767.0;
+        into.deadZoneShoulder0 = 0.5;
+        into.deadZoneShoulder1 = 30.0/255.0;
+        // console.log(raw.axes);
+        into.rightStickX = raw.axes[2];
+        into.rightStickY = raw.axes[5];
+        into.leftShoulder1 = raw.buttons[6];
+        into.rightShoulder1 = raw.buttons[7];
+    };
+
     var FirefoxMacXbox360Controller = function(raw, into, index) {
         CommonMacXbox360Controller(raw, into, index);
         into.rightStickX = raw.axes[2];
@@ -302,5 +371,7 @@
     } else if (isFirefox && isMac) {
         active.push([ '45e-', '28e-', FirefoxMacXbox360Controller, "Xbox 360", Gamepad_ImageDataUrls_Xbox360 ]);
         active.push([ '54c-', '268-', FirefoxMacPS3Controller, "Playstation 3", Gamepad_ImageDataUrls_PS3 ]);
+    } else if (isChrome && isLinux) {
+        active.push([ 'Vendor: 046d', 'Product: c216', ChromeLinuxLogitechDualActionController, "Logitech Dual Action", Gamepad_ImageDataUrls_Xbox360 ]);
     }
 })();
