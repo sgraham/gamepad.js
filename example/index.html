@@ -93,7 +93,7 @@
                     for (var j = 0; j < names.length; ++j) {
                         var name = names[j];
                         var buttonDom = document.getElementById('pad' + i + '_' + names[j]);
-                        buttonDom.src = pad.images[name];
+                        if (pad.images) buttonDom.src = pad.images[name];
                         if (j >= 2)
                             buttonDom.style.opacity = pad[name] / 0.8 + 0.2;
                     }
