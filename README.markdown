@@ -16,7 +16,7 @@ Quick start
 
 Add
     
-    <script src=".../gamepad.js" type="text/javascript"></script>
+    <script src="../gamepad.js" type="text/javascript"></script>
 
 to your html.
 
