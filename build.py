@@ -1,3 +1,4 @@
+#!/usr/bin/python
 # Simple script to slurp all the icons we have, convert them to data urls, and
 # append to gamepad_no_images.js to create the final gamepad.js that most
 # people will want to use.
