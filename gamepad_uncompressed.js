@@ -2,7 +2,7 @@
 */
 (function() {
     var getField = function() {
-        return navigator.webkitGamepads || navigator.mozGamepads || navigator.gamepads;
+        return navigator.webkitGetGamepads || navigator.mozGamepads || navigator.gamepads;
     };
 
     var Item = function() {
