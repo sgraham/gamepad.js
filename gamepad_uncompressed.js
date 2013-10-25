@@ -145,6 +145,7 @@
         mapIndividualPad(rawPads, i);
         return curData[i];
     };
+
     Gamepad.supported = getField() != undefined;
 
 
